@@ -1,0 +1,14 @@
+
+# Messages
+
+CExec has space for 256 different messages, all of which will be documented
+(and updated) in this document (not all ADRs are like this, but this one
+is authoritative).
+
+# `0x00` - "NOP"
+
+A message packet beginning with `0x00` is a no-operation packet.
+It may be arbitrarially long with arbitrary contents,
+
+
+
