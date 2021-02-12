@@ -5,6 +5,8 @@ CExec has space for 256 different messages, all of which will be documented
 (and updated) in this document (not all ADRs are like this, but this one
 is authoritative).
 
+All numbers are unsigned big-endian unless specified otherwise.
+
 # `0x00` - "NOP"
 
 A message packet beginning with `0x00` is a no-operation packet.
@@ -82,14 +84,53 @@ High-level structure:
 
 # `0x02` - "WASM exec request"
 
-Peers may send eachother binary WASM blobs to be executed within a sandbox.
+Peers may send eachother signed binary WASM blobs to be executed within a sandbox.
 
 The WASM blob __SHOULD__ have a function named `cexec_main` which takes no arguments and returns an `i32` status code.
 
 If it does not then the function `main` is looked up and executed, with any required arguments being passed in as `0x00` for their type signature. By default a 2-second delay is added before the execution of these mis-built WASM blobs and a warning will be printed to the server's `stderr`.
 
+High-level structure:
+
+ - Public key: 0-65535 bytes, utf-8, _usually_ a shielded PGP key block (`-----BEGIN PGP PUBLIC KEY BLOCK-----\n...`)
+               but we may end up defining a `FORMAT,Base64==` encoding later depending on what crypto primitives make sense.
+
+ - WASM Binary: 0-4294967296 bytes, binary, 
+ - Signed Binary hash: 0-65535 bytes, utf-8, _possibly_ a shielded PGP signed message (`-----BEGIN PGP SIGNED MESSAGE-----\n....`)
+
+ - Number of utf-8 string arguments: 2 bytes, binary, big endian
+
+ - Arg N: 0-65535 bytes, utf-8
 
 
+WASM Exec request details:
+
+All OS APIs will have permission ACLs in the server config. This means you can, on a per-pubkey basis,
+
+control:
+ - filesystem access: what does the WASM blob get from a `listdir('/')`?
+
+ - network access: can the WASM blob send data out? to whom?
+ 
+ - GUI access: the most limited of all, I expect to see whitelisted APIs
+   which defer to programs like `notify-send` to talk directly to the user.
+   This also means things like X11 display will need to be whitelisted in the server config.
+ 
+ - stdout/stdin/stderr:
+   All WASM blobs will have a closed stdin and stderr. stdout will be reported to the server,
+   which __SHOULD__ send the stream (verbatim!) back to the caller.
+   Over UDP this means callers will have to send N bytes as `0x00` - NOP packets
+   in order to prove they can receive N bytes to prevent amplification attacks.
+   Exit codes will not have any meaning and there are no plans to send them back to callers.
+
+
+## Example packet
+
+```
+TODO
+```
+
+# `0x03` - ""
 
 
 

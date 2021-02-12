@@ -1,2 +1,5 @@
 /target
 *.bak
+__pycache__/
+
+

@@ -4,6 +4,9 @@ version = "0.1.0"
 authors = ["Jeffrey McAteer <jeffrey.p.mcateer@gmail.com>"]
 edition = "2018"
 
+[features]
+systray-gui = ["systray"]
+
 [lib]
 name = "cexec"
 path = "src/lib.rs"
@@ -11,14 +14,29 @@ path = "src/lib.rs"
 [[bin]]
 name = "cexec"
 path = "src/cexec.rs"
+required-features = ["systray-gui"]
 
 [[bin]]
 name = "cexec-server"
 path = "src/cexec_server.rs"
-
+required-features = ["systray-gui"]
 
 [dependencies]
 wasmer = "1.0.2"
 dirs = "3.0"
+toml = "0.5"
+serde = { version = "1.0", features = ["derive"] }
+
+pgp = "0.7"
+chrono = "0.4.19"
+humantime = "2.0"
+
+# Only used for binaries so wind0rks users can tell that the server is up.
+systray = { git = "https://github.com/qdot/systray-rs.git", optional = true }
+
+
+[dev-dependencies]
+tempfile = "3.2"
+
 
 
