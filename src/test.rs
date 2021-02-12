@@ -15,3 +15,15 @@ fn example_config_parses() {
 }
 
 
+#[test]
+fn test_packet_handling() {
+  let c = config::Config::default();
+  let m = message::get_peer_id_record(&c);
+  
+  assert!(matches!(m, message::Message::PEER_ID_REC { .. } ));
+
+  
+
+}
+
+

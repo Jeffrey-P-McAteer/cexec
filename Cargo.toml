@@ -30,6 +30,7 @@ serde = { version = "1.0", features = ["derive"] }
 pgp = "0.7"
 chrono = "0.4.19"
 humantime = "2.0"
+hostname = "^0.3"
 
 # Only used for binaries so wind0rks users can tell that the server is up.
 systray = { git = "https://github.com/qdot/systray-rs.git", optional = true }

@@ -2,6 +2,11 @@
 # Example config file.
 # cexec uses one config for both server and client mode.
 
+name = "Unnamed Computer"
+
+description = "Nothing interesting to see here, move along."
+
+
 # Peer identity record broadcast frequency.
 # This is how often you tell a network that you exist.
 pid_broadcast_frequency = "5m"
