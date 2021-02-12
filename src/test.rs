@@ -22,7 +22,16 @@ fn test_packet_handling() {
   
   assert!(matches!(m, message::Message::PEER_ID_REC { .. } ));
 
-  
+  match m {
+    message::Message::PEER_ID_REC{pub_key, name, name_sig, description, description_sig} => {
+      
+      assert!(message::check_sig(&pub_key, &name, &name_sig));
+      assert!(message::check_sig(&pub_key, &description, &description_sig));
+
+    }
+    unk => panic!()
+  }
+
 
 }
 

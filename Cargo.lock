@@ -317,12 +317,16 @@ checksum = "4c0496836a84f8d0495758516b8621a622beb77c0fed418570e50764093ced48"
 name = "cexec"
 version = "0.1.0"
 dependencies = [
+ "base64 0.13.0",
  "chrono",
  "dirs",
  "hostname",
  "humantime 2.1.0",
  "pgp",
+ "rand 0.7.3",
+ "rsa",
  "serde",
+ "sha2",
  "systray",
  "tempfile",
  "toml",

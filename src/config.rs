@@ -48,14 +48,14 @@ pub fn read_config() -> Config {
       if ! config_path.exists() {
         // Try to write the default config for users to edit later
         if let Err(e) = fs::write(&config_path, include_str!("cexec.toml")) {
-          eprintln!("{}", e);
+          eprintln!("{}:{}: {}", file!(), line!(), e);
         }
       }
 
       match read_config_from_file(&config_path) {
         Ok(config) => config,
         Err(e) => {
-          eprintln!("{}", e);
+          eprintln!("{}:{}: {}", file!(), line!(), e);
           Config::default()
         }
       }
@@ -94,7 +94,7 @@ fn read_identity_key(maybe_armored_string: Option<&str>) -> pgp::SignedSecretKey
     match pgp::SignedSecretKey::from_string(maybe_armored_string) {
       Ok((key, _headers)) => return key,
       Err(e) => {
-        eprintln!("{}", e);
+        eprintln!("{}:{}: {}", file!(), line!(), e);
       }
     }
   }
@@ -110,17 +110,17 @@ fn read_identity_key(maybe_armored_string: Option<&str>) -> pgp::SignedSecretKey
           match pgp::SignedSecretKey::from_string(maybe_armored_string) {
             Ok((key, _headers)) => return key,
             Err(e) => {
-              eprintln!("{}", e);
+              eprintln!("{}:{}: {}", file!(), line!(), e);
             }
           }
         }
         Err(e) => {
-          eprintln!("{}", e);
+          eprintln!("{}:{}: {}", file!(), line!(), e);
         }
       }
     }
     Err(e) => {
-      eprintln!("{}", e);
+      eprintln!("{}:{}: {}", file!(), line!(), e);
     }
   }
 
