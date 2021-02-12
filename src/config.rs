@@ -1,5 +1,4 @@
 
-use dirs;
 use serde::{Serialize, Deserialize};
 
 use std::path::{Path};
