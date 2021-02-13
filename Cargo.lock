@@ -323,8 +323,6 @@ dependencies = [
  "hostname",
  "humantime 2.1.0",
  "pgp",
- "rand 0.7.3",
- "rsa",
  "serde",
  "sha2",
  "systray",

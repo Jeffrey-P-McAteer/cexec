@@ -1,7 +1,5 @@
 
-use crate::*;
-
-use serde::{Serialize, Deserialize, Deserializer};
+use serde::{Deserialize, Deserializer};
 use pgp::Deserializable;
 
 use std::path::{Path};
@@ -29,7 +27,10 @@ pub struct Config {
 impl Default for Config {
   fn default() -> Self {
     // Get the hostname, defaulting to "Unnamed" if OS or utf-8 errors occur.
-    let name = hostname::get().unwrap_or(OsString::from("Unnamed")).into_string().unwrap_or("Unnamed".to_string());
+    let name = hostname::get()
+      .unwrap_or_else(|_| OsString::from("Unnamed"))
+      .into_string()
+      .unwrap_or_else(|_| "Unnamed".to_string());
 
     Config {
       name: name,

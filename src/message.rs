@@ -40,8 +40,7 @@ pub enum Message {
 
 pub fn get_peer_id_record(c: &config::Config) -> Message {
   use pgp::types::SecretKeyTrait;
-  use rand::thread_rng;
-
+  
   Message::PEER_ID_REC {
     pub_key: c.identity_key.primary_key.public_key(),
     name: c.name.clone(),
@@ -53,7 +52,6 @@ pub fn get_peer_id_record(c: &config::Config) -> Message {
 
 pub fn sign(identity_key: &pgp::SignedSecretKey, message: &str) -> String {
   use pgp::types::SecretKeyTrait;
-  use rsa::PublicKey as PublicKeyTrait;
   use sha2::Digest;
 
   let mut s = String::new();
@@ -92,7 +90,6 @@ pub fn sign(identity_key: &pgp::SignedSecretKey, message: &str) -> String {
 // Returns true IFF the signature is valid
 pub fn check_sig(pkey: &pgp::packet::PublicKey, message: &str, message_sig: &str) -> bool {
   use pgp::types::PublicKeyTrait;
-  use rsa::PublicKey as RSAPublicKeyTrait;
   use sha2::Digest;
 
   let mut hasher = sha2::Sha256::new();
@@ -100,7 +97,7 @@ pub fn check_sig(pkey: &pgp::packet::PublicKey, message: &str, message_sig: &str
 
   let msg_digest = hasher.finalize();
 
-  let message_sig_bytes = base64::decode(message_sig).unwrap_or(vec![]);
+  let message_sig_bytes = base64::decode(message_sig).unwrap_or_default();
   
   let r = pkey.verify_signature(
     pgp::crypto::hash::HashAlgorithm::SHA2_256,

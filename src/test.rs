@@ -29,7 +29,7 @@ fn test_packet_handling() {
       assert!(message::check_sig(&pub_key, &description, &description_sig));
 
     }
-    unk => panic!()
+    _unk => panic!()
   }
 
 

@@ -22,10 +22,10 @@ import subprocess
 def main(args=sys.argv):
   subprocess.run([
     'cargo', 'clippy'
-  ])
+  ], check=True)
   subprocess.run([
     'cargo', 'test'
-  ])
+  ], check=True)
 
 if __name__ == '__main__':
   main()
