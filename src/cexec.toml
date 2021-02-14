@@ -12,5 +12,9 @@ description = "Nothing interesting to see here, move along."
 pid_broadcast_frequency = "5m"
 
 
+untrusted_max_cycles = 1222111
+
+trusted_max_cycles = 999000111
+
 
 

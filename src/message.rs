@@ -24,6 +24,7 @@ pub enum Message {
     wasm_binary: Vec<u8>,
     wasm_binary_sig: String,
     arguments: Vec<String>,
+    arguments_sig: String, // sig computed from arguments.join("").as_bytes()
     exec_req_id: String, // 255 byte max
     exec_req_id_sig: String,
   },
@@ -38,26 +39,49 @@ pub enum Message {
 }
 
 
-pub fn get_peer_id_record(c: &config::Config) -> Message {
+pub fn build_peer_id_record(c: &config::Config) -> Message {
   use pgp::types::SecretKeyTrait;
   
   Message::PEER_ID_REC {
     pub_key: c.identity_key.primary_key.public_key(),
     name: c.name.clone(),
-    name_sig: sign(&c.identity_key, &c.name),
+    name_sig: sign(&c.identity_key, &c.name.as_bytes()),
     description: c.description.clone(),
-    description_sig: sign(&c.identity_key, &c.description),
+    description_sig: sign(&c.identity_key, &c.description.as_bytes()),
   }
 }
 
-pub fn sign(identity_key: &pgp::SignedSecretKey, message: &str) -> String {
+pub fn build_wasm_exec_req<I>(
+  c: &config::Config, wasm_bytes: &[u8], arguments: Vec<String>, exec_req_id: I
+) -> Message
+  where I: Into<String>
+{
+  use pgp::types::SecretKeyTrait;
+
+  let exec_req_id: String = exec_req_id.into();
+
+  let arguments_sig = sign(&c.identity_key, arguments.join("").as_bytes());
+  let exec_req_id_sig = sign(&c.identity_key, exec_req_id.as_bytes());
+  
+  Message::WASM_EXEC_REQUEST {
+    pub_key: c.identity_key.primary_key.public_key(),
+    wasm_binary: wasm_bytes.to_vec(),
+    wasm_binary_sig: sign(&c.identity_key, wasm_bytes),
+    arguments: arguments,
+    arguments_sig: arguments_sig,
+    exec_req_id: exec_req_id,
+    exec_req_id_sig: exec_req_id_sig,
+  }
+}
+
+pub fn sign(identity_key: &pgp::SignedSecretKey, message: &[u8]) -> String {
   use pgp::types::SecretKeyTrait;
   use sha2::Digest;
 
   let mut s = String::new();
 
   let mut hasher = sha2::Sha256::new();
-  hasher.update( message.as_bytes() );
+  hasher.update( message );
 
   let msg_digest = hasher.finalize();
 
@@ -88,12 +112,12 @@ pub fn sign(identity_key: &pgp::SignedSecretKey, message: &str) -> String {
 }
 
 // Returns true IFF the signature is valid
-pub fn check_sig(pkey: &pgp::packet::PublicKey, message: &str, message_sig: &str) -> bool {
+pub fn check_sig(pkey: &pgp::packet::PublicKey, message: &[u8], message_sig: &str) -> bool {
   use pgp::types::PublicKeyTrait;
   use sha2::Digest;
 
   let mut hasher = sha2::Sha256::new();
-  hasher.update( message.as_bytes() );
+  hasher.update( message );
 
   let msg_digest = hasher.finalize();
 

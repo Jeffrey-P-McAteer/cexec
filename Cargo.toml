@@ -22,22 +22,28 @@ path = "src/cexec_server.rs"
 required-features = ["systray-gui"]
 
 [dependencies]
-wasmer = "1.0.2"
-dirs = "3.0"
-toml = "0.5"
+
+wasmer = "1.0"
+wasmer-middlewares = "1.0"
+wasmer-compiler = "1.0"
+wasmer-engine-native = "1.0"
+wasmer-engine = "1.0"
+wasmer-compiler-singlepass = "1.0"
+
 serde = { version = "1.0", features = ["derive"] }
+toml = "0.5"
 base64 = "0.13"
 
 pgp = "0.7"
 sha2 = "0.9"
 
+dirs = "3.0"
 chrono = "0.4.19"
 humantime = "2.0"
 hostname = "^0.3"
 
 # Only used for binaries so wind0rks users can tell that the server is up.
 systray = { git = "https://github.com/qdot/systray-rs.git", optional = true }
-
 
 [dev-dependencies]
 tempfile = "3.2"

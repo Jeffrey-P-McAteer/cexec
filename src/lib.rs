@@ -6,6 +6,7 @@
 
 pub mod config;
 pub mod message;
+pub mod exec;
 
 
 #[cfg(test)]

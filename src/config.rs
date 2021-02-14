@@ -22,6 +22,9 @@ pub struct Config {
   pub identity_key: pgp::SignedSecretKey,
 
   pub pid_broadcast_frequency: Duration,
+
+  pub untrusted_max_cycles: u64,
+  pub trusted_max_cycles: u64,
 }
 
 impl Default for Config {
@@ -37,6 +40,8 @@ impl Default for Config {
       description: String::new(),
       identity_key: read_identity_key(None),
       pid_broadcast_frequency: Duration::from_secs(300),
+      untrusted_max_cycles: 1222111,
+      trusted_max_cycles: 999000111,
     }
   }
 }
