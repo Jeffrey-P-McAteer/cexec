@@ -136,11 +136,6 @@ pub fn get_engine(canonicalize_nans: bool) -> impl Engine {
     Native::new(compiler_config).engine()
 }
 
-// pub fn get_store(canonicalize_nans: bool) -> Store {
-//     Store::new(&get_engine(canonicalize_nans))
-// }
-
-
 use wasmer_engine::Tunables;
 
 use std::ptr::NonNull;
