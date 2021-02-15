@@ -89,6 +89,7 @@ fn api_env_printf(format_cstr_ptr: i32, va_args_ptr: i32) -> i32 {
 }
 
 fn cost_always_one(_: &wasmer::wasmparser::Operator) -> u64 {
+    eprintln!("cost_always_one");
     1
 }
 
