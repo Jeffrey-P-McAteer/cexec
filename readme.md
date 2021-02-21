@@ -18,6 +18,13 @@ TODO
 
 TODO
 
+# Testing
+
+```bash
+# Run all builds and tests
+python -m hygiene
+```
+
 # TODOs
 
  - [ ] Implement limited [WASI](https://github.com/webassembly/wasi) API for client programs

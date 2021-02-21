@@ -127,8 +127,10 @@ use wasmer_engine_native::Native;
 pub fn get_compiler(canonicalize_nans: bool) -> impl CompilerConfig {
     // Singlepass impl
     let mut compiler = wasmer_compiler_singlepass::Singlepass::new();
+    compiler.enable_stack_check(true);
     compiler.canonicalize_nans(canonicalize_nans);
     compiler.enable_verifier();
+    compiler.enable_pic();
     compiler
 }
 
