@@ -124,19 +124,14 @@ use wasmer_compiler::CompilerConfig;
 use wasmer_engine::Engine;
 use wasmer_engine_native::Native;
 
-pub fn get_compiler(canonicalize_nans: bool) -> impl CompilerConfig {
+pub fn get_compiler() -> impl CompilerConfig {
     // Singlepass impl
     let mut compiler = wasmer_compiler_singlepass::Singlepass::new();
     compiler.enable_stack_check(true);
-    compiler.canonicalize_nans(canonicalize_nans);
+    compiler.canonicalize_nans(false);
     compiler.enable_verifier();
     compiler.enable_pic();
     compiler
-}
-
-pub fn get_engine(canonicalize_nans: bool) -> impl Engine {
-    let mut compiler_config = get_compiler(canonicalize_nans);
-    Native::new(compiler_config).engine()
 }
 
 use wasmer_engine::Tunables;
@@ -152,7 +147,7 @@ use wasmer::{
 pub fn get_store_with_middlewares<I: Iterator<Item = Arc<dyn ModuleMiddleware>>>(
     middlewares: I,
 ) -> Store {
-    let mut compiler_config = get_compiler(false);
+    let mut compiler_config = get_compiler();
     for x in middlewares {
         compiler_config.push_middleware(x);
     }
