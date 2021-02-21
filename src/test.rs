@@ -96,14 +96,24 @@ fn test_message_wasm_exec_req() {
       assert!(message::check_sig(&pub_key, &exec_req_id.as_bytes(), &exec_req_id_sig));
       assert!(message::check_sig(&pub_key, &arguments.join("").as_bytes(), &arguments_sig));
 
-      {
-        let r = exec::run_wasm(c.untrusted_max_cycles, &wasm_binary, arguments);
+      { // Let normal run run
+        let r = exec::run_wasm(c.untrusted_max_cycles, &wasm_binary, arguments.clone());
 
         if let Err(ref e) = r {
           eprintln!("{}:{}: {}", file!(), line!(), e);
         }
 
         assert!(r.is_ok());
+      }
+
+      { // Limit to 3 instructions and assert failure
+        let r = exec::run_wasm(3, &wasm_binary, arguments.clone());
+
+        if let Err(ref e) = r {
+          eprintln!("{}:{}: {}", file!(), line!(), e);
+        }
+
+        assert!(r.is_err());
       }
 
 
