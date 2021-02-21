@@ -42,15 +42,13 @@ fn test_message_wasm_exec_req() {
 
   let test_based_wat = r#"
     (module
-     (type $FUNCSIG$ii (func (param i32) (result i32)))
-     (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
      (import "env" "printf" (func $printf (param i32 i32) (result i32)))
      (table 0 anyfunc)
      (memory $0 1)
      (data (i32.const 16) "Hello, %d args.\n\00")
      (export "memory" (memory $0))
      (export "main" (func $main))
-     (func $main (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
+     (func $main (param $0 i32) (param $1 i32) (result i32)
       (local $2 i32)
       (i32.store offset=4
        (i32.const 0)
@@ -63,8 +61,7 @@ fn test_message_wasm_exec_req() {
         )
        )
       )
-      (i32.store
-       (get_local $2)
+      (set_local $2
        (get_local $0)
       )
       (drop

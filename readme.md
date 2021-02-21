@@ -18,6 +18,12 @@ TODO
 
 TODO
 
+# TODOs
+
+ - [ ] Implement limited [WASI](https://github.com/webassembly/wasi) API for client programs
+ - [ ] Flush out configuration to let users extend the API with one line + shell script OR `.dll`/`.so` + name of function (using C ABI) OR `.wasm` + name of function (using WASM ABI).
+ - [ ] misc. infrastructure efforts like N+1 forwarding for servers, IP rate limiting, etc.
+
 
 
 
