@@ -14,7 +14,7 @@ It may be arbitrarily long with arbitrary contents, and servers+clients
 MAY read as much as they want.
 
 The purpose of this packet is to allow UDP clients to prove they own some
-amount of bandwidth to make CExec unable to participate in reflection/amplification
+amount of bandwidth which allows CExec systems to be unable to participate in reflection/amplification
 DoS attacks.
 
 A client who sends a 1kb request for 10kb of information over UDP will only receive

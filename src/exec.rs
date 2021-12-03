@@ -25,11 +25,17 @@ pub fn run_wasm(
   let instance = instance.not_started_instance(); // TODO should we respect/run start() functions?
 
   // run "main", assuming it exists
-  let _res = instance.invoke_export_limited(
+  /*let _res = instance.invoke_export_limited(
     "main",
     &[wasmi::RuntimeValue::I32( arguments.len() as i32 ), wasmi::RuntimeValue::I32( 0 /*TODO copy arguments to WASM memory*/ )],
     &mut host_ex_fns,
     max_cycles
+  )?;*/
+
+  let _res = instance.invoke_export(
+    "main",
+    &[wasmi::RuntimeValue::I32( arguments.len() as i32 ), wasmi::RuntimeValue::I32( 0 /*TODO copy arguments to WASM memory*/ )],
+    &mut host_ex_fns
   )?;
 
   Ok(())
