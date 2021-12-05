@@ -94,7 +94,12 @@ fn test_message_wasm_exec_req() {
       
       assert!(message::check_sig(&pub_key, &wasm_binary, &wasm_binary_sig));
       assert!(message::check_sig(&pub_key, &exec_req_id.as_bytes(), &exec_req_id_sig));
-      assert!(message::check_sig(&pub_key, &arguments.join("").as_bytes(), &arguments_sig));
+
+      let mut concat_args: Vec<u8> = Vec::new();
+      for i in 0..arguments.len() {
+        concat_args.extend(&arguments[i]);
+      }
+      assert!(message::check_sig(&pub_key, &concat_args, &arguments_sig));
 
       { // Let normal run run
         let r = exec::run_wasm(c.untrusted_max_cycles, &wasm_binary, arguments.clone());

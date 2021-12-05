@@ -23,7 +23,7 @@ pub enum Message {
     pub_key: pgp::packet::PublicKey, // owned by the client submitting the request
     wasm_binary: Vec<u8>,
     wasm_binary_sig: String,
-    arguments: Vec<String>,
+    arguments: Vec<Vec<u8>>, // instead of String we use Vec<u8> so some programs can accept eg an image binary as input.
     arguments_sig: String, // sig computed from arguments.join("").as_bytes()
     exec_req_id: String, // 255 byte max
     exec_req_id_sig: String,
@@ -52,7 +52,7 @@ pub fn build_peer_id_record(c: &config::Config) -> Message {
 }
 
 pub fn build_wasm_exec_req<I>(
-  c: &config::Config, wasm_bytes: &[u8], arguments: Vec<String>, exec_req_id: I
+  c: &config::Config, wasm_bytes: &[u8], arguments: Vec<Vec<u8>>, exec_req_id: I
 ) -> Message
   where I: Into<String>
 {
@@ -60,7 +60,12 @@ pub fn build_wasm_exec_req<I>(
 
   let exec_req_id: String = exec_req_id.into();
 
-  let arguments_sig = sign(&c.identity_key, arguments.join("").as_bytes());
+  let mut concatinated_arguments: Vec<u8> = Vec::new();
+  for arg_i in 0..arguments.len() {
+    concatinated_arguments.extend(&arguments[arg_i]);
+  }
+
+  let arguments_sig = sign(&c.identity_key, &concatinated_arguments);
   let exec_req_id_sig = sign(&c.identity_key, exec_req_id.as_bytes());
   
   Message::WASM_EXEC_REQUEST {

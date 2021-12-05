@@ -2,7 +2,7 @@
 pub fn run_wasm(
   max_cycles: u64,
   wasm_binary: &[u8],
-  arguments: Vec<String>
+  arguments: Vec<Vec<u8>>
 )
   -> Result<(), Box<dyn std::error::Error>>
 {
